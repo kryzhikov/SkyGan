@@ -6,18 +6,20 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from time import time
 from saveload import load_obj
-input_path = './Styles'
 
-img2vec = Img2Vec(model = 'alexnet')
-a = load_obj('vecs')
-names = load_obj('names')
+def get_style(im_path = 'pasha_style.jpg'):
 
-a = np.array(a)
-start = time()
-q = img2vec.get_vec(Image.open('pasha4.jpg'))
-score = np.sum(q * a, axis = 1) / np.linalg.norm(a, axis = 1)
-topk_idx = np.argsort(score)[::-1]
-for i in topk_idx:
-    print('> %s\t%s'%(score[i], names[i]))
-end = time()
-print(end-start)
+    img2vec = Img2Vec(model = 'alexnet')
+    a = load_obj('vecs')
+    names = load_obj('names')
+
+    a = np.array(a)
+    start = time()
+    q = img2vec.get_vec(Image.open('pasha_style.jpg'))
+    score = np.sum(q * a, axis = 1) / np.linalg.norm(a, axis = 1)
+    topk_idx = np.argsort(score)[::-1]
+    for i in topk_idx:
+        print('> %s\t%s'%(score[i], names[i]))
+    end = time()
+    print(end-start)
+    return [names[i] for i in topk_idx]
